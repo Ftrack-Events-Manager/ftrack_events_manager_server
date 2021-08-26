@@ -25,8 +25,6 @@ def get_events():
         })
 
     data.sort(key=lambda x: x['name'])
-    print(data)
-
     return jsonify({
         'status': 'success',
         'msg': 'request successful',
