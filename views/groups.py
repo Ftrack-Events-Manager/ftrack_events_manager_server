@@ -6,7 +6,7 @@ groups_bp = Blueprint('groups', __name__)
 
 
 @groups_bp.route('/api/groups/get_groups', methods=['GET'])
-def get_events():
+def get_groups():
     groups = DBInfo.get_groups()
     data = []
     for group in groups:
@@ -29,4 +29,14 @@ def get_events():
         'status': 'success',
         'msg': 'request successful',
         'data': data
+    })
+
+
+@groups_bp.route('/api/groups/add_groups', methods=['POST'])
+def add_group():
+    print(request.json)
+    # todo 实现添加组接口
+    return jsonify({
+        'status': 'success',
+        'msg': 'add group successful'
     })
