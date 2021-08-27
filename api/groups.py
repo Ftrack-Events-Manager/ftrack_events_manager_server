@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, request, jsonify
+from flask import request, jsonify
+
+from redprint import RedPrint
 from .utils.db_helper import DBInfo, DBLog
 
-groups_bp = Blueprint('groups', __name__)
+groups_rp = RedPrint('groups')
 
 
-@groups_bp.route('/api/groups/get_groups', methods=['GET'])
+@groups_rp.route('/get_groups', methods=['GET'])
 def get_groups():
     groups = DBInfo.get_groups()
     data = []
@@ -32,7 +34,7 @@ def get_groups():
     })
 
 
-@groups_bp.route('/api/groups/add_groups', methods=['POST'])
+@groups_rp.route('/add_groups', methods=['POST'])
 def add_group():
     print(request.json)
     # todo 实现添加组接口

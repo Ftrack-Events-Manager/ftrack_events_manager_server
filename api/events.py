@@ -4,14 +4,15 @@
 @time: 2021/08/26 23:24 
 """
 
-from flask import Blueprint, jsonify
+from flask import jsonify
 
+from redprint import RedPrint
 from .utils.db_helper import DBInfo
 
-events_bp = Blueprint('events', __name__)
+events_rp = RedPrint('events')
 
 
-@events_bp.route('/api/events/get_not_used_events', methods=['GET'])
+@events_rp.route('/get_not_used_events', methods=['GET'])
 def get_not_used_events():
     events = DBInfo.get_not_used_events()
     data = []

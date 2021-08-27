@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, request, jsonify
+from flask import request, jsonify
 
-users_bp = Blueprint('users', __name__)
+from redprint import RedPrint
+
+users_rp = RedPrint('users')
 
 
-@users_bp.route('/api/users/login', methods=['POST'])
+@users_rp.route('/login', methods=['POST'])
 def index():
     data = request.json
     if data['username'] == 'admin' and data['password'] == '123456':
