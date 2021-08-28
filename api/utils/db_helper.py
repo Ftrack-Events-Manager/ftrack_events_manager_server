@@ -3,7 +3,7 @@
 @author: LiaoKong
 @time: 2021/08/26 22:00
 """
-from ftrack_events_helper.utils.mongo import Mongo
+from ftrack_events_helper.mongo import Mongo
 from ftrack_events_helper.config import DB_INFO_CONFIG, DB_LOG_CONFIG
 
 
