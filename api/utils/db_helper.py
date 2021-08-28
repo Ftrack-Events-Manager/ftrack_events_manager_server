@@ -3,14 +3,12 @@
 @author: LiaoKong
 @time: 2021/08/26 22:00
 """
-from .mongo import Mongo
-
-DB_INFO = ('FtrackEventsManager', 'EventsInfos')
-DB_LOG = ('FtrackEventsManager', 'EventsLogs')
+from ftrack_events_helper.utils.mongo import Mongo
+from ftrack_events_helper.config import DB_INFO_CONFIG, DB_LOG_CONFIG
 
 
 class DBInfo(object):
-    db = Mongo(*DB_INFO)
+    db = Mongo(*DB_INFO_CONFIG)
 
     @classmethod
     def get_groups(cls):
@@ -22,11 +20,11 @@ class DBInfo(object):
 
     @classmethod
     def get_not_used_events(cls):
-        return cls.db.query({'type': 'event', 'used': False}).all(True)
+        return cls.db.query({'type': 'event'}).all(True)
 
 
 class DBLog(object):
-    db = Mongo(*DB_LOG)
+    db = Mongo(*DB_LOG_CONFIG)
 
     @classmethod
     def get_errors(cls, group_name):
