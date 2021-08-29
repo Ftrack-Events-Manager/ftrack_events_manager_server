@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import shortuuid
 from flask import request, jsonify
 
 from redprint import RedPrint
@@ -14,8 +15,7 @@ def get_groups():
     for group in groups:
         error_num = len(DBLog.get_errors(group['name']))
         run_events = 0
-        for event_id in group['events']:
-            event = DBInfo.get_event_by_id(event_id)
+        for event in group['events']:
             if event.get('enabled'):
                 run_events += 1
 
@@ -23,7 +23,8 @@ def get_groups():
             'id': group['id'],
             'name': group['name'],
             'run_events': run_events,
-            'error_num': error_num
+            'error_num': error_num,
+            'status': group['status'],
         })
 
     data.sort(key=lambda x: x['name'])
@@ -34,10 +35,20 @@ def get_groups():
     })
 
 
-@groups_rp.route('/add_groups', methods=['POST'])
+@groups_rp.route('/add_group', methods=['POST'])
 def add_group():
-    print(request.json)
-    # todo 实现添加组接口
+    data = request.json
+    events = data['events']
+    db_data = {
+        'id': shortuuid.uuid(),
+        'type': 'group',
+        'name': data['name'],
+        'events': events,
+        'status': 'stop',
+    }
+    DBInfo.add_group(db_data)
+    DBInfo.remove_not_used_events([x['id'] for x in events])
+
     return jsonify({
         'status': 'success',
         'msg': 'add group successful'
