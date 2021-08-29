@@ -23,4 +23,4 @@ class RedPrint(object):
 
         for func, rule, options in self.mound:
             endpoint = options.pop('endpoint', func.__name__)
-            bp.add_rule_rule(url_prefix + rule, endpoint, func, **options)
+            bp.add_url_rule(url_prefix + rule, endpoint, func, **options)

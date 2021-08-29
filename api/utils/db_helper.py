@@ -22,10 +22,16 @@ class DBInfo(object):
     def get_not_used_events(cls):
         return cls.db.query({'type': 'event'}).all(True)
 
+    @classmethod
+    def set_not_used_events(cls, data):
+        cls.db.delete({'type': 'event'})
+        return cls.db.add(data)
+
 
 class DBLog(object):
     db = Mongo(*DB_LOG_CONFIG)
 
     @classmethod
     def get_errors(cls, group_name):
-        return cls.db.query({'type': {'$ne': 'info'}, 'group': group_name}).all(True)
+        return cls.db.query({'type': {'$ne': 'info'}, 'group': group_name}
+                            ).all(True)
