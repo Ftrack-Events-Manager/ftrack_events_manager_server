@@ -45,14 +45,8 @@ def get_not_used_events():
             if name in event_by_event_name:
                 event_by_event_name.pop(name)
 
-    events = list(event_by_event_name.values())
-    data = jsonify({
+    return jsonify({
         'status': 'success',
         'msg': 'get not used events successful',
-        'data': events
+        'data': list(event_by_event_name.values())
     })
-
-    if event_by_event_name:
-        DBInfo.set_not_used_events(events)
-
-    return data

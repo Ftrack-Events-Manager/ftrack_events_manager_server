@@ -47,9 +47,19 @@ def add_group():
         'status': 'stop',
     }
     DBInfo.add_group(db_data)
-    DBInfo.remove_not_used_events([x['id'] for x in events])
 
     return jsonify({
         'status': 'success',
         'msg': 'add group successful'
+    })
+
+
+@groups_rp.route('/delete_group', methods=['POST'])
+def delete_group():
+    group_id = request.json['id']
+    DBInfo.delete_group(group_id)
+    return jsonify({
+        'status': 'success',
+        'msg': 'delete group successful',
+        'data': DBInfo.get_groups()
     })

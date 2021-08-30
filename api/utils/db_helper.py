@@ -19,18 +19,8 @@ class DBInfo(object):
         return cls.db.add(data)
 
     @classmethod
-    def get_not_used_events(cls):
-        return cls.db.query({'type': 'event'}).all(True)
-
-    @classmethod
-    def set_not_used_events(cls, data):
-        cls.db.delete({'type': 'event'})
-        return cls.db.add(data)
-
-    @classmethod
-    def remove_not_used_events(cls, event_ids):
-        for event_id in event_ids:
-            cls.db.delete({'type': 'event', 'id': event_id})
+    def delete_group(cls, group_id):
+        return cls.db.delete({'type': 'group', 'id': group_id})
 
 
 class DBLog(object):
