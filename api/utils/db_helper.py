@@ -15,6 +15,10 @@ class DBInfo(object):
         return cls.db.query({'type': 'group'}).all(True)
 
     @classmethod
+    def get_group(cls, group_id):
+        return cls.db.query_one({'type': 'group', 'id': group_id}, {'_id': 0})
+
+    @classmethod
     def add_group(cls, data):
         return cls.db.add(data)
 

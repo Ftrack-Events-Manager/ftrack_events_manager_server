@@ -35,6 +35,16 @@ def get_groups():
     })
 
 
+@groups_rp.route('/get_group_info', methods=['POST'])
+def get_group_info():
+    group_id = request.json['id']
+    return jsonify({
+        'status': 'success',
+        'msg': 'get group successful',
+        'data': DBInfo.get_group(group_id)
+    })
+
+
 @groups_rp.route('/add_group', methods=['POST'])
 def add_group():
     data = request.json
