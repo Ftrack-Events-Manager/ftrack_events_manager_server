@@ -23,6 +23,7 @@ def get_groups():
             'id': group['id'],
             'name': group['name'],
             'run_events': run_events,
+            # fixme 这里获取的错误数可能不对，需要修复
             'error_num': error_num,
             'status': group['status'],
         })
@@ -50,26 +51,23 @@ def update_group():
     data = request.json
     events = data['events']
     group_id = data.get('id')
+    db_data = {
+        'name': data['name'],
+        'events': events,
+    }
+
     if not group_id:
-        db_data = {
+        db_data.update({
             'id': shortuuid.uuid(),
             'type': 'group',
-            'name': data['name'],
-            'events': events,
             'status': 'stop',
-        }
+        })
         DBInfo.add_group(db_data)
         return jsonify({
             'status': 'success',
             'msg': 'add group successful'
         })
     else:
-        db_data = {
-            'type': 'group',
-            'name': data['name'],
-            'events': events,
-            'status': 'stop',
-        }
         DBInfo.update_group(group_id, db_data)
         return jsonify({
             'status': 'success',

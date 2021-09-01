@@ -12,7 +12,7 @@ class DBInfo(object):
 
     @classmethod
     def get_groups(cls):
-        return cls.db.query({'type': 'group'}).all(True)
+        return cls.db.query({'type': 'group'}, {'_id': 0}).all(True)
 
     @classmethod
     def get_group(cls, group_id):
@@ -30,11 +30,21 @@ class DBInfo(object):
     def update_group(cls, group_id, data):
         return cls.db.update(data, {'type': 'group', 'id': group_id})
 
+    @classmethod
+    def stop_group(cls, group_id):
+        return cls.db.update({'status': 'stop'},
+                             {'type': 'group', 'id': group_id})
+
+    @classmethod
+    def start_group(cls, group_id):
+        return cls.db.update({'status': 'run'},
+                             {'type': 'group', 'id': group_id})
+
 
 class DBLog(object):
     db = Mongo(*DB_LOG_CONFIG)
 
     @classmethod
     def get_errors(cls, group_name):
-        return cls.db.query({'type': {'$ne': 'info'}, 'group': group_name}
-                            ).all(True)
+        return cls.db.query({'type': {'$ne': 'info'}, 'group': group_name},
+                            {'_id': 0}).all(True)
