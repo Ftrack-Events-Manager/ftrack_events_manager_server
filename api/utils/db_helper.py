@@ -26,6 +26,10 @@ class DBInfo(object):
     def delete_group(cls, group_id):
         return cls.db.delete({'type': 'group', 'id': group_id})
 
+    @classmethod
+    def update_group(cls, group_id, data):
+        return cls.db.update(data, {'type': 'group', 'id': group_id})
+
 
 class DBLog(object):
     db = Mongo(*DB_LOG_CONFIG)

@@ -45,23 +45,36 @@ def get_group_info():
     })
 
 
-@groups_rp.route('/add_group', methods=['POST'])
-def add_group():
+@groups_rp.route('/update_group', methods=['POST'])
+def update_group():
     data = request.json
     events = data['events']
-    db_data = {
-        'id': shortuuid.uuid(),
-        'type': 'group',
-        'name': data['name'],
-        'events': events,
-        'status': 'stop',
-    }
-    DBInfo.add_group(db_data)
-
-    return jsonify({
-        'status': 'success',
-        'msg': 'add group successful'
-    })
+    group_id = data.get('id')
+    if not group_id:
+        db_data = {
+            'id': shortuuid.uuid(),
+            'type': 'group',
+            'name': data['name'],
+            'events': events,
+            'status': 'stop',
+        }
+        DBInfo.add_group(db_data)
+        return jsonify({
+            'status': 'success',
+            'msg': 'add group successful'
+        })
+    else:
+        db_data = {
+            'type': 'group',
+            'name': data['name'],
+            'events': events,
+            'status': 'stop',
+        }
+        DBInfo.update_group(group_id, db_data)
+        return jsonify({
+            'status': 'success',
+            'msg': 'update group successful'
+        })
 
 
 @groups_rp.route('/delete_group', methods=['POST'])
