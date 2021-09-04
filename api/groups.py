@@ -98,15 +98,26 @@ def get_group_logs():
     log_date = data['logDate']
 
     logs = DBLog.get_group_logs(group['name'], log_date, only_show_error)
-    data = []
+    log_data = []
+    warning_count = 0
+    error_count = 0
     for log in logs:
-        data.append({
+        log_data.append({
             'type': log['type'],
-            'msg': logger.make_msg(log)
+            'msg': logger.make_msg(log).replace('\n', '<br/>'),
+            'id': str(log['_id'])
         })
+        if log['type'] == 'warning':
+            warning_count += 1
+        elif log['type'] in ['error', 'exception']:
+            error_count += 1
 
     return jsonify({
         'status': 'success',
         'msg': 'get group logs successful',
-        'data': data
+        'data': {
+            'logs': log_data,
+            'warningLogCount': warning_count,
+            'errorLogCount': error_count
+        }
     })

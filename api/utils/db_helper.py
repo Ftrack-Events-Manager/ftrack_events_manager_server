@@ -63,4 +63,8 @@ class DBLog(object):
         if only_show_error:
             data.update({'type': {'$ne': 'info'}})
 
-        return cls.db.query(data, {'_id': 0}).all(True)
+        return cls.db.query(data).all()
+
+
+if __name__ == '__main__':
+    print(list(DBLog.get_group_logs('事件组1', '2021/09/03', False)))
