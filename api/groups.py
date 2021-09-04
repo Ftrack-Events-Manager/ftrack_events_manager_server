@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import shortuuid
 from flask import request, jsonify
+from ftrack_events_helper import Log
 
 from redprint import RedPrint
 from .utils.db_helper import DBInfo, DBLog
@@ -23,7 +24,6 @@ def get_groups():
             'id': group['id'],
             'name': group['name'],
             'run_events': run_events,
-            # fixme 这里获取的错误数可能不对，需要修复
             'error_num': error_num,
             'status': group['status'],
         })
@@ -83,4 +83,30 @@ def delete_group():
         'status': 'success',
         'msg': 'delete group successful',
         'data': DBInfo.get_groups()
+    })
+
+
+logger = Log()
+
+
+@groups_rp.route('/get_group_logs', methods=['POST'])
+def get_group_logs():
+    data = request.json
+    group_id = data['id']
+    group = DBInfo.get_group(group_id)
+    only_show_error = data['onlyShowError']
+    log_date = data['logDate']
+
+    logs = DBLog.get_group_logs(group['name'], log_date, only_show_error)
+    data = []
+    for log in logs:
+        data.append({
+            'type': log['type'],
+            'msg': logger.make_msg(log)
+        })
+
+    return jsonify({
+        'status': 'success',
+        'msg': 'get group logs successful',
+        'data': data
     })

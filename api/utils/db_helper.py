@@ -3,6 +3,8 @@
 @author: LiaoKong
 @time: 2021/08/26 22:00
 """
+import datetime
+
 from ftrack_events_helper.mongo import Mongo
 from ftrack_events_helper.config import DB_INFO_CONFIG, DB_LOG_CONFIG
 
@@ -48,3 +50,17 @@ class DBLog(object):
     def get_errors(cls, group_name):
         return cls.db.query({'type': {'$ne': 'info'}, 'group': group_name},
                             {'_id': 0}).all(True)
+
+    @classmethod
+    def get_group_logs(cls, group_name, date, only_show_error):
+        start_date = datetime.datetime.strptime(date, '%Y/%m/%d')
+        end_date = start_date + datetime.timedelta(days=1)
+
+        data = {
+            'group': group_name,
+            'time': {'$gte': start_date, '$lt': end_date}
+        }
+        if only_show_error:
+            data.update({'type': {'$ne': 'info'}})
+
+        return cls.db.query(data, {'_id': 0}).all(True)
