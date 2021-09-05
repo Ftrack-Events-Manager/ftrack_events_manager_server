@@ -17,6 +17,12 @@ class DBInfo(object):
         return cls.db.query({'type': 'group'}, {'_id': 0}).all(True)
 
     @classmethod
+    def get_run_groups(cls):
+        return cls.db.query(
+            {'type': 'group', 'status': 'run'}, {'_id': 0}
+        ).all(True)
+
+    @classmethod
     def get_group(cls, group_id):
         return cls.db.query_one({'type': 'group', 'id': group_id}, {'_id': 0})
 
@@ -50,6 +56,10 @@ class DBLog(object):
     def get_errors(cls, group_name):
         return cls.db.query({'type': {'$ne': 'info'}, 'group': group_name},
                             {'_id': 0}).all(True)
+
+    @classmethod
+    def delete_logs(cls, group_name):
+        return cls.db.delete({'group': group_name})
 
     @classmethod
     def get_group_logs(cls, group_name, date, only_show_error):

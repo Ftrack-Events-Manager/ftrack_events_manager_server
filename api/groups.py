@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import shortuuid
 from flask import request, jsonify
-from ftrack_events_helper import Log
+from ftrack_events_helper import logger
 
 from redprint import RedPrint
 from .utils.db_helper import DBInfo, DBLog
@@ -78,15 +78,14 @@ def update_group():
 @groups_rp.route('/delete_group', methods=['POST'])
 def delete_group():
     group_id = request.json['id']
+    info = DBInfo.get_group(group_id)
     DBInfo.delete_group(group_id)
+    DBLog.delete_logs(info['name'])
     return jsonify({
         'status': 'success',
         'msg': 'delete group successful',
         'data': DBInfo.get_groups()
     })
-
-
-logger = Log()
 
 
 @groups_rp.route('/get_group_logs', methods=['POST'])
