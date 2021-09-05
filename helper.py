@@ -15,6 +15,8 @@ def _create_subscribe_event_thread(files, group):
         name, file_path, priority = file_info
         for func_obj in get_event_func(file_path):
             event_name = func_obj.__name__
+            if hasattr(func_obj, 'event_name'):
+                event_name = func_obj.event_name
             if event_name == name:
                 func_obj.priority = priority
                 subscribe_event(func_obj, session, False)
